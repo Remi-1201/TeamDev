@@ -9,6 +9,9 @@ class TeamsController < ApplicationController
   def show
     @working_team = @team
     change_keep_team(current_user, @team)
+    if params[:selected_user].present?
+      change_team_admin(params[:selected_user],@working_team)
+    end
   end
 
   def new

@@ -25,6 +25,10 @@ class AgendasController < ApplicationController
     if @agenda.user == current_user || @agenda.team.owner == current_user
       @agenda.destroy
       redirect_to dashboard_path, notice: "削除完了"
+      users = User.where(id: Assign.where(team_id: @agenda.team_id).pluck(:user_id))
+      users.each do |user|
+        AssignMailer.assign_mail(user.email).deliver
+      end
     else
       redirect_to dashboard_path, notice: "権限がありません！"
     end
